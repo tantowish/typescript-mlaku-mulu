@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  tourist
+}
+
+enum TravelStatus {
+  upcoming
+  ongoing
+  completed
+  canceled
+}
+
+enum HistoryStatus {
+  active
+  canceled
+  completed
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  email      String    @unique @db.VarChar(255)
+  password   String    @db.VarChar(100)
+  name       String    @db.VarChar(100)
+  username   String    @unique @db.VarChar(255)
+  role       Role      @default(tourist)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime? @db.Timestamp()
+
+  TravelHistories TravelHistories[]
+
+  @@map("users")
+}
+
+model Destination {
+  id        Int     @id @default(autoincrement())
+  city      String  @db.VarChar(100)
+  latitude  Float
+  longitude Float
+  is_active Boolean @default(true)
+
+  Travel Travel[]
+
+  @@map("destinations")
+}
+
+model Travel {
+  id             Int          @id @default(autoincrement())
+  start_date     DateTime     @default(now())
+  end_date       DateTime
+  destination_id Int
+  status         TravelStatus @default(upcoming)
+  created_at     DateTime     @default(now())
+  updated_at     DateTime     @updatedAt
+
+  TravelHistories TravelHistories[]
+
+  Destination Destination @relation(fields: [destination_id], references: [id])
+
+  @@map("travels")
+}
+
+model TravelHistories {
+  id         String        @id @default(uuid())
+  user_id    Int
+  travel_id  Int
+  status     HistoryStatus @default(active)
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+  deleted_at DateTime?     @db.Timestamp(3)
+
+  user   User   @relation(fields: [user_id], references: [id])
+  travel Travel @relation(fields: [travel_id], references: [id])
+
+  @@map("travel_histories")
+}
