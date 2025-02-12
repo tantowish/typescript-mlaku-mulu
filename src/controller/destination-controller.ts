@@ -18,14 +18,17 @@ export class DestinationController {
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await DestinationService.getAll()
-            res.status(200).json({
-                data: response
-            })
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+    
+            const response = await DestinationService.getAll(page, limit);
+            
+            res.status(200).json(response);
         } catch (e) {
-            next(e)
+            next(e);
         }
     }
+    
 
     static async getByID(req: Request, res: Response, next: NextFunction){
         try {

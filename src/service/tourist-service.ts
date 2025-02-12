@@ -30,16 +30,33 @@ export class TouristService {
         return toUserResponse(user)
     }
 
-    static async getAll(): Promise<UserResponse[]> {
+    static async getAll(page: number = 1, limit: number = 10): Promise<{ data: UserResponse[], total: number, page: number, limit: number }> {
+        const skip = (page - 1) * limit;
+    
         const tourists = await prismaClient.user.findMany({
             where: {
                 role: Role.tourist,
                 deleted_at: null
+            },
+            skip,
+            take: limit
+        });
+    
+        const total = await prismaClient.user.count({
+            where: {
+                role: Role.tourist,
+                deleted_at: null
             }
-        })
-
-        return toUserArrayResponse(tourists)
+        });
+    
+        return {
+            data: toUserArrayResponse(tourists),
+            total,
+            page,
+            limit
+        };
     }
+    
 
     static async getByID(id: number): Promise<UserResponse> {
         const tourist = await this.checkTouristExist(id )

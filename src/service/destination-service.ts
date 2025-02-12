@@ -16,10 +16,24 @@ export class DestinationService {
         return toDestinationResponse(destination)
     }
 
-    static async getAll(): Promise<DestinationResponse[]> {
-        const destinations = await prismaClient.destination.findMany()
-        return toDestinationArrayResponse(destinations)
+    static async getAll(page: number = 1, limit: number = 10): Promise<{ data: DestinationResponse[], total: number, page: number, limit: number }> {
+        const skip = (page - 1) * limit;
+    
+        const destinations = await prismaClient.destination.findMany({
+            skip,
+            take: limit
+        });
+    
+        const total = await prismaClient.destination.count();
+    
+        return {
+            data: toDestinationArrayResponse(destinations),
+            total,
+            page,
+            limit
+        };
     }
+    
 
     static async getByID(travel_id: number): Promise<DestinationResponse> {
         const destination = await this.checkDestinationExist(travel_id)

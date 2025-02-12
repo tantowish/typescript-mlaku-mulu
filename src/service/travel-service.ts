@@ -36,18 +36,30 @@ export class TravelService {
         })
     }
 
-    static async getAll(): Promise<TravelResponse[]> {
+    static async getAll(page: number = 1, limit: number = 10): Promise<{ data: TravelResponse[], total: number, page: number, limit: number }> {
+        const skip = (page - 1) * limit;
+    
         const travels = await prismaClient.travel.findMany({
+            skip,
+            take: limit,
             include: {
                 Destination: true
             }
         });
     
-        return toTravelArrayResponse(travels.map(travel => ({
-            ...travel,
-            destination: travel.Destination,
-        })))
+        const total = await prismaClient.travel.count();
+    
+        return {
+            data: toTravelArrayResponse(travels.map(travel => ({
+                ...travel,
+                destination: travel.Destination,
+            }))),
+            total,
+            page,
+            limit
+        };
     }
+    
     
     static async getByID(travel_id: number): Promise<TravelResponse> {
         const travel = await this.checkTravelExist(travel_id)
