@@ -5,7 +5,6 @@ import { UserValidation } from "../validation/user-validation";
 import { Validation } from "../validation/validation";
 import bcrypt from 'bcrypt'
 import { Role, User } from "@prisma/client";
-import { UserService } from "./user-service";
 
 export class TouristService {
     static async create(req: RegisterRequest): Promise<UserResponse> {
@@ -43,17 +42,7 @@ export class TouristService {
     }
 
     static async getByID(id: number): Promise<UserResponse> {
-        const tourist = await prismaClient.user.findUnique({
-            where: {
-                id: id,
-                role: Role.tourist,
-                deleted_at: null
-            }
-        })
-
-        if (!tourist) {
-            throw new ResponseErorr(404, "Tourist not found")
-        }
+        const tourist = await this.checkTouristExist(id )
 
         return toUserResponse(tourist)
     }

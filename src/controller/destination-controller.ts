@@ -1,13 +1,13 @@
 import { Response, NextFunction, Request } from "express";
 import { UserRequest } from "../types/user-request";
-import { TouristService } from "../service/tourist-service";
-import { RegisterRequest, UpdateUserRequest } from "../model/user-model";
+import { DestinationRequest } from "../model/destination-model";
+import { DestinationService } from "../service/destination-service";
 
-export class TouristController {
+export class DestinationController {
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const request: RegisterRequest = req.body as RegisterRequest
-            const response = await TouristService.create(request)
+            const request: DestinationRequest = req.body as DestinationRequest
+            const response = await DestinationService.create(request)
             res.status(200).json({
                 data: response
             })
@@ -18,7 +18,7 @@ export class TouristController {
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await TouristService.getAll()
+            const response = await DestinationService.getAll()
             res.status(200).json({
                 data: response
             })
@@ -34,7 +34,7 @@ export class TouristController {
                 return res.status(400).json({ message: "Invalid ID format" });
             }
 
-            const response = await TouristService.getByID(id)
+            const response = await DestinationService.getByID(id)
             res.status(200).json({
                 data: response
             })
@@ -50,8 +50,8 @@ export class TouristController {
                 return res.status(400).json({ message: "Invalid ID format" });
             }
 
-            const request: UpdateUserRequest = req.body as UpdateUserRequest
-            const response = await TouristService.update(id, request)
+            const request: DestinationRequest = req.body as DestinationRequest
+            const response = await DestinationService.update(id, request)
             res.status(200).json({
                 data: response
             })
@@ -67,9 +67,9 @@ export class TouristController {
                 return res.status(400).json({ message: "Invalid ID format" });
             }
 
-            await TouristService.delete(id)
+            await DestinationService.delete(id)
             res.status(200).json({
-                message: "Tourist successfully deleted"
+                message: "Destination successfully deleted"
             })
         } catch(e) {
             next(e)
