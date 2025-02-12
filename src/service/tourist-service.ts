@@ -17,7 +17,7 @@ export class TouristService {
         })
 
         if (duplicateEmail.length > 0) {
-            throw new ResponseErorr(400, "Email has already taken")
+            throw new ResponseErorr(400, "email has already taken")
         }
 
         registerRequest.password = await bcrypt.hash(registerRequest.password, 10)
@@ -64,7 +64,7 @@ export class TouristService {
             })
 
             if (checkEmail) {
-                throw new ResponseErorr(400, "Email has already taken")
+                throw new ResponseErorr(400, "email has already taken")
             }
 
             user.email = updateRequest.email
@@ -78,7 +78,7 @@ export class TouristService {
             })
 
             if (checkUsername) {
-                throw new ResponseErorr(400, "Username has already taken")
+                throw new ResponseErorr(400, "username has already taken")
             }
 
             user.username = updateRequest.username
@@ -127,7 +127,7 @@ export class TouristService {
         })
 
         if (!userExist) {
-            throw new ResponseErorr(404, "Tourist not found")
+            throw new ResponseErorr(404, "tourist not found")
         }
 
         return userExist

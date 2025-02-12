@@ -18,7 +18,7 @@ export class UserService {
         })
 
         if (duplicateEmail.length > 0) {
-            throw new ResponseErorr(400, "Email has already taken")
+            throw new ResponseErorr(400, "email has already taken")
         }
 
         const duplicateUsername = await prismaClient.user.findMany({
@@ -28,7 +28,7 @@ export class UserService {
         })
 
         if (duplicateUsername.length > 0) {
-            throw new ResponseErorr(400, "Username has already taken")
+            throw new ResponseErorr(400, "username has already taken")
         }
 
         registerRequest.password = await bcrypt.hash(registerRequest.password, 10)
@@ -51,13 +51,13 @@ export class UserService {
         })
 
         if (!user) {
-            throw new ResponseErorr(404, "User not found")
+            throw new ResponseErorr(404, "user not found")
         }
 
         const isPasswordValid = await bcrypt.compare(loginRequest.password, user.password)
 
         if (!isPasswordValid) {
-            throw new ResponseErorr(401, "Email or password is invalid")
+            throw new ResponseErorr(401, "email or password is invalid")
         }
 
         return toUserTokenResponse(user, this.generateToken(user))
@@ -85,7 +85,7 @@ export class UserService {
             })
 
             if (checkEmail) {
-                throw new ResponseErorr(400, "Email has already taken")
+                throw new ResponseErorr(400, "email has already taken")
             }
 
             user.email = updateRequest.email
@@ -99,7 +99,7 @@ export class UserService {
             })
 
             if (checkUsername) {
-                throw new ResponseErorr(400, "Username has already taken")
+                throw new ResponseErorr(400, "username has already taken")
             }
 
             user.username = updateRequest.username
@@ -134,7 +134,7 @@ export class UserService {
         })
 
         if (!userExist) {
-            throw new ResponseErorr(404, "User not found")
+            throw new ResponseErorr(404, "user not found")
         }
 
         return userExist

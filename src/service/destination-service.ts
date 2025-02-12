@@ -1,15 +1,12 @@
 import { prismaClient } from "../app/database";
 import { ResponseErorr } from "../error/reponse-error";
-import { RegisterRequest, UpdateUserRequest, UserResponse, toUserResponse, toUserArrayResponse } from "../model/user-model";
-import { UserValidation } from "../validation/user-validation";
 import { Validation } from "../validation/validation";
-import bcrypt from 'bcrypt'
-import { Destination, Role, User } from "@prisma/client";
+import { Destination } from "@prisma/client";
 import { DestinationRequest, DestinationResponse, toDestinationArrayResponse, toDestinationResponse } from "../model/destination-model";
 import { DestinationValidation } from "../validation/destination-validation";
 
 export class DestinationService {
-    static async create(req: DestinationRequest): Promise<DestinationRequest> {
+    static async create(req: DestinationRequest): Promise<DestinationResponse> {
         const destinationRequest = Validation.validate(DestinationValidation.CREATE, req)
 
         const destination = await prismaClient.destination.create({
@@ -24,27 +21,27 @@ export class DestinationService {
         return toDestinationArrayResponse(destinations)
     }
 
-    static async getByID(id: number): Promise<DestinationResponse> {
-        const destination = await prismaClient.destination.findUnique({
+    static async getByID(travel_id: number): Promise<DestinationResponse> {
+        const destination = await this.checkDestinationExist(travel_id)
+        return toDestinationResponse(destination)
+    }
+
+    static async update(destination_id: number, req: DestinationRequest): Promise<DestinationResponse> {
+        const destinationRequest = Validation.validate(DestinationValidation.UPDATE, req)
+
+        await this.checkDestinationExist(destination_id)
+
+        const destinationUpdate = await prismaClient.destination.update({
             where: {
-                id: id
-            }
+                id: destination_id
+            },
+            data: destinationRequest
         })
 
-        if (!destination) {
-            throw new ResponseErorr(404, "Destination not found")
-        }
-
-        return toDestinationResponse(destination)
+        return toDestinationResponse(destinationUpdate)
     }
 
-    static async update(destination_id: number, req: DestinationRequest): Promise<DestinationRequest> {
-        const destination = await this.checkDestinationExist(destination_id)
-
-        return toDestinationResponse(destination)
-    }
-
-    static async delete(destination_id: number): Promise<DestinationRequest> {
+    static async delete(destination_id: number): Promise<DestinationResponse> {
         await this.checkDestinationExist(destination_id)
 
         const destinationDelete = await prismaClient.destination.delete({
@@ -65,7 +62,7 @@ export class DestinationService {
         })
 
         if (!destinationExsist) {
-            throw new ResponseErorr(404, "Destination not found")
+            throw new ResponseErorr(404, "destination not found")
         }
 
         return destinationExsist

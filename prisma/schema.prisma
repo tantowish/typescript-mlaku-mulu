@@ -62,9 +62,9 @@ model Destination {
 
 model Travel {
   id             Int          @id @default(autoincrement())
+  destination_id Int
   start_date     DateTime     @default(now())
   end_date       DateTime
-  destination_id Int
   status         TravelStatus @default(upcoming)
   created_at     DateTime     @default(now())
   updated_at     DateTime     @updatedAt

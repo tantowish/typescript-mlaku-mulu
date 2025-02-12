@@ -1,13 +1,13 @@
 import { Response, NextFunction, Request } from "express";
 import { UserRequest } from "../types/user-request";
-import { DestinationRequest } from "../model/destination-model";
-import { DestinationService } from "../service/destination-service";
+import { TravelRequest } from "../model/travel-model";
+import { TravelService } from "../service/travel-service";
 
-export class DestinationController {
+export class TravelController {
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const request: DestinationRequest = req.body as DestinationRequest
-            const response = await DestinationService.create(request)
+            const request: TravelRequest = req.body as TravelRequest
+            const response = await TravelService.create(request)
             res.status(200).json({
                 data: response
             })
@@ -18,7 +18,7 @@ export class DestinationController {
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await DestinationService.getAll()
+            const response = await TravelService.getAll()
             res.status(200).json({
                 data: response
             })
@@ -31,10 +31,10 @@ export class DestinationController {
         try {
             const id = parseInt(req.params.id, 10);
             if (isNaN(id)) {
-                return res.status(400).json({ message: "invalid format" });
+                return res.status(400).json({ message: "invalid id format" });
             }
 
-            const response = await DestinationService.getByID(id)
+            const response = await TravelService.getByID(id)
             res.status(200).json({
                 data: response
             })
@@ -47,11 +47,11 @@ export class DestinationController {
         try {
             const id = parseInt(req.params.id, 10);
             if (isNaN(id)) {
-                return res.status(400).json({ message: "invalid format" });
+                return res.status(400).json({ message: "invalid id format" });
             }
 
-            const request: DestinationRequest = req.body as DestinationRequest
-            const response = await DestinationService.update(id, request)
+            const request: TravelRequest = req.body as TravelRequest
+            const response = await TravelService.update(id, request)
             res.status(200).json({
                 data: response
             })
@@ -64,12 +64,12 @@ export class DestinationController {
         try {
             const id = parseInt(req.params.id, 10);
             if (isNaN(id)) {
-                return res.status(400).json({ message: "invalid format" });
+                return res.status(400).json({ message: "invalid id format" });
             }
 
-            await DestinationService.delete(id)
+            await TravelService.delete(id)
             res.status(200).json({
-                message: "Destination successfully deleted"
+                message: "travel successfully deleted"
             })
         } catch(e) {
             next(e)

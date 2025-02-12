@@ -2,6 +2,7 @@ import express from 'express'
 import { authMiddleware } from '../middleware/auth-middleware'
 import { TouristController } from '../controller/tourist-controller'
 import { DestinationController } from '../controller/destination-controller'
+import { TravelController } from '../controller/travel-controller'
 
 export const apiAdmin = express.Router()
 
@@ -22,6 +23,10 @@ apiAdmin.put('/api/v1/destinations/:id', DestinationController.update)
 apiAdmin.delete('/api/v1/destinations/:id', DestinationController.delete)
 
 // Travel 
-
+apiAdmin.get('/api/v1/travels', TravelController.getAll)
+apiAdmin.get('/api/v1/travels/:id', TravelController.getByID)
+apiAdmin.post('/api/v1/travels', TravelController.create)
+apiAdmin.put('/api/v1/travels/:id', TravelController.update)
+apiAdmin.delete('/api/v1/travels/:id', TravelController.delete)
 
 // Tourist Travel API

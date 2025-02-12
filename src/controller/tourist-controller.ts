@@ -31,7 +31,7 @@ export class TouristController {
         try {
             const id = parseInt(req.params.id, 10);
             if (isNaN(id)) {
-                return res.status(400).json({ message: "Invalid ID format" });
+                return res.status(400).json({ message: "invalid id format" });
             }
 
             const response = await TouristService.getByID(id)
@@ -47,7 +47,7 @@ export class TouristController {
         try {
             const id = parseInt(req.params.id, 10);
             if (isNaN(id)) {
-                return res.status(400).json({ message: "Invalid ID format" });
+                return res.status(400).json({ message: "invalid id format" });
             }
 
             const request: UpdateUserRequest = req.body as UpdateUserRequest
@@ -64,7 +64,7 @@ export class TouristController {
         try {
             const id = parseInt(req.params.id, 10);
             if (isNaN(id)) {
-                return res.status(400).json({ message: "Invalid ID format" });
+                return res.status(400).json({ message: "invalid id format" });
             }
 
             await TouristService.delete(id)
