@@ -2,6 +2,7 @@ import { Response, NextFunction, Request } from "express";
 import { UserRequest } from "../types/user-request";
 import { TravelRequest } from "../model/travel-model";
 import { TravelService } from "../service/travel-service";
+import { TravelStatus } from "@prisma/client";
 
 export class TravelController {
     static async create(req: Request, res: Response, next: NextFunction) {
@@ -18,14 +19,17 @@ export class TravelController {
 
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await TravelService.getAll()
-            res.status(200).json({
-                data: response
-            })
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const status = req.query.status as TravelStatus | undefined
+    
+            const response = await TravelService.getAll(page, limit, status);
+            res.status(200).json(response);
         } catch (e) {
-            next(e)
+            next(e);
         }
     }
+    
 
     static async getByID(req: Request, res: Response, next: NextFunction){
         try {

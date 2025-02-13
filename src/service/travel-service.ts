@@ -4,7 +4,7 @@ import { RegisterRequest, UpdateUserRequest, UserResponse, toUserResponse, toUse
 import { UserValidation } from "../validation/user-validation";
 import { Validation } from "../validation/validation";
 import bcrypt from 'bcrypt'
-import { Destination, Role, Travel, User } from "@prisma/client";
+import { Destination, Role, Travel, TravelStatus, User } from "@prisma/client";
 import { DestinationRequest, DestinationResponse, toDestinationArrayResponse, toDestinationResponse } from "../model/destination-model";
 import { DestinationValidation } from "../validation/destination-validation";
 import { TravelValidation } from "../validation/travel-validation";
@@ -36,10 +36,20 @@ export class TravelService {
         })
     }
 
-    static async getAll(page: number = 1, limit: number = 10): Promise<{ data: TravelResponse[], total: number, page: number, limit: number }> {
+    static async getAll(
+        page: number = 1, 
+        limit: number = 10, 
+        status?: TravelStatus
+    ): Promise<{ data: TravelResponse[], total: number, page: number, limit: number }> {
         const skip = (page - 1) * limit;
     
+        const filter: any = {};
+        if (status) {
+            filter.status = status;
+        }
+    
         const travels = await prismaClient.travel.findMany({
+            where: filter,
             skip,
             take: limit,
             include: {
@@ -47,7 +57,7 @@ export class TravelService {
             }
         });
     
-        const total = await prismaClient.travel.count();
+        const total = await prismaClient.travel.count({ where: filter });
     
         return {
             data: toTravelArrayResponse(travels.map(travel => ({
@@ -58,8 +68,7 @@ export class TravelService {
             page,
             limit
         };
-    }
-    
+    }    
     
     static async getByID(travel_id: number): Promise<TravelResponse> {
         const travel = await this.checkTravelExist(travel_id)
@@ -81,7 +90,6 @@ export class TravelService {
         const travel = await prismaClient.travel.update({
             where: {
                 id: travel_id,
-                destination_id: travelRequest.destination_id
             },
             data: travelRequest,
             include: {

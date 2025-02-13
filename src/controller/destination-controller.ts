@@ -34,7 +34,7 @@ export class DestinationController {
         try {
             const id = parseInt(req.params.id, 10);
             if (isNaN(id)) {
-                return res.status(400).json({ message: "invalid format" });
+                return res.status(400).json({ message: "invalid id format" });
             }
 
             const response = await DestinationService.getByID(id)
@@ -50,7 +50,7 @@ export class DestinationController {
         try {
             const id = parseInt(req.params.id, 10);
             if (isNaN(id)) {
-                return res.status(400).json({ message: "invalid format" });
+                return res.status(400).json({ message: "invalid id format" });
             }
 
             const request: DestinationRequest = req.body as DestinationRequest
@@ -67,12 +67,12 @@ export class DestinationController {
         try {
             const id = parseInt(req.params.id, 10);
             if (isNaN(id)) {
-                return res.status(400).json({ message: "invalid format" });
+                return res.status(400).json({ message: "invalid id format" });
             }
 
             await DestinationService.delete(id)
             res.status(200).json({
-                message: "Destination successfully deleted"
+                message: "destination successfully deleted"
             })
         } catch(e) {
             next(e)
