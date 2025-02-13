@@ -14,7 +14,7 @@ export const errorMiddleware = async (error: Error, req: Request, res: Response,
             error: error.message
         })
     }
-    else {
+    else if(process.env.ENV != "production") {
         res.status(500).json({
             error: error.message
         })
