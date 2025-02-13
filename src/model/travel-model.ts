@@ -29,14 +29,7 @@ export function toTravelResponse(travel: TravelDestination): TravelResponse {
         status: travel.status,
         created_at: travel.created_at,
         updated_at: travel.updated_at,
-        destination: {
-            id: travel.destination.id,
-            city: travel.destination.city,
-            country: travel.destination.country,
-            latitude: travel.destination.latitude,
-            longitude: travel.destination.longitude,
-            is_active: travel.destination.is_active
-        }
+        destination: travel.destination
     }
 }
 
@@ -49,13 +42,6 @@ export function toTravelArrayResponse(travels: TravelDestination[]): TravelRespo
         status: travel.status,
         created_at: travel.created_at,
         updated_at: travel.updated_at,
-        destination: {
-            id: travel.destination.id,
-            city: travel.destination.city,
-            country: travel.destination.country,
-            latitude: travel.destination.latitude,
-            longitude: travel.destination.longitude,
-            is_active: travel.destination.is_active
-        }
+        destination: travel.destination
     }));
 }

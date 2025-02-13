@@ -27,12 +27,12 @@ export const authMiddleware = async (req: UserRequest, res: Response, next: Next
 
         if (req.user?.role != Role.admin) {
             res.status(401).json({
-                error: "Unauthorized"
+                error: "unauthorized"
             }).end()
         }
     } catch (error) {
         res.status(401).json({
-            error: "Unauthorized"
+            error: "unauthorized"
         }).end()
         return
     }

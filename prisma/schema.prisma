@@ -42,7 +42,7 @@ model User {
   updated_at DateTime  @updatedAt
   deleted_at DateTime? @db.Timestamp()
 
-  TravelHistories TravelHistories[]
+  travelHistories TravelHistory[]
 
   @@map("users")
 }
@@ -55,7 +55,7 @@ model Destination {
   longitude Float
   is_active Boolean @default(true)
 
-  Travel Travel[]
+  travel Travel[]
 
   @@map("destinations")
 }
@@ -69,14 +69,14 @@ model Travel {
   created_at     DateTime     @default(now())
   updated_at     DateTime     @updatedAt
 
-  TravelHistories TravelHistories[]
+  travelHistory TravelHistory[]
 
-  Destination Destination @relation(fields: [destination_id], references: [id])
+  destination Destination @relation(fields: [destination_id], references: [id])
 
   @@map("travels")
 }
 
-model TravelHistories {
+model TravelHistory {
   id         String        @id @default(uuid())
   user_id    Int
   travel_id  Int

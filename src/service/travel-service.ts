@@ -1,12 +1,7 @@
 import { prismaClient } from "../app/database";
 import { ResponseErorr } from "../error/reponse-error";
-import { RegisterRequest, UpdateUserRequest, UserResponse, toUserResponse, toUserArrayResponse } from "../model/user-model";
-import { UserValidation } from "../validation/user-validation";
 import { Validation } from "../validation/validation";
-import bcrypt from 'bcrypt'
-import { Destination, Role, Travel, TravelStatus, User } from "@prisma/client";
-import { DestinationRequest, DestinationResponse, toDestinationArrayResponse, toDestinationResponse } from "../model/destination-model";
-import { DestinationValidation } from "../validation/destination-validation";
+import { TravelStatus } from "@prisma/client";
 import { TravelValidation } from "../validation/travel-validation";
 import { toTravelArrayResponse, toTravelResponse, TravelRequest, TravelResponse } from "../model/travel-model";
 import { DestinationService } from "./destination-service";
@@ -26,13 +21,13 @@ export class TravelService {
         const travel = await prismaClient.travel.create({
             data: travelRequest,
             include: {
-                Destination: true
+                destination: true
             }
         })
 
         return toTravelResponse({
             ...travel,
-            destination: travel.Destination,
+            destination: travel.destination,
         })
     }
 
@@ -53,7 +48,7 @@ export class TravelService {
             skip,
             take: limit,
             include: {
-                Destination: true
+                destination: true
             }
         });
     
@@ -62,7 +57,7 @@ export class TravelService {
         return {
             data: toTravelArrayResponse(travels.map(travel => ({
                 ...travel,
-                destination: travel.Destination,
+                destination: travel.destination,
             }))),
             total,
             page,
@@ -93,13 +88,13 @@ export class TravelService {
             },
             data: travelRequest,
             include: {
-                Destination: true
+                destination: true
             }
         })
 
         return toTravelResponse({
             ...travel,
-            destination: travel.Destination,
+            destination: travel.destination,
         })
     }
 
@@ -111,13 +106,13 @@ export class TravelService {
                 id: travel_id
             },
             include: {
-                Destination: true
+                destination: true
             }
         })
 
         return toTravelResponse({
             ...travelDelete,
-            destination: travelDelete.Destination,
+            destination: travelDelete.destination,
         })
     }
 
@@ -128,7 +123,7 @@ export class TravelService {
                 id: travel_id
             },
             include: {
-                Destination: true
+                destination: true
             }
         })
 
@@ -138,7 +133,7 @@ export class TravelService {
 
         return toTravelResponse({
             ...travelExist,
-            destination: travelExist.Destination,
+            destination: travelExist.destination,
         })
     }
 }

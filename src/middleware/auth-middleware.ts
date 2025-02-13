@@ -25,7 +25,7 @@ export const authMiddleware = async (req: UserRequest, res: Response, next: Next
         }
     } catch (error) {
         res.status(401).json({
-            error: "Unauthorized"
+            error: "unauthorized"
         }).end()
         return
     }
