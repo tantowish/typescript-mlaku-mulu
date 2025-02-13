@@ -86,7 +86,10 @@ export class TravelService {
             where: {
                 id: travel_id,
             },
-            data: travelRequest,
+            data: {
+                ...travelRequest, 
+                updated_at: new Date()
+            },
             include: {
                 destination: true
             }

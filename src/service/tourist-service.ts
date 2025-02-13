@@ -109,7 +109,10 @@ export class TouristService {
             where: {
                 id: user.id
             },
-            data: user
+            data: {
+                ...user,
+                updated_at: new Date()
+            }
         })
 
         return toUserResponse(userUpdate)
@@ -127,7 +130,10 @@ export class TouristService {
             where: {
                 id: id
             },
-            data: user
+            data: {
+                ...user,
+                updated_at: new Date()
+            }
         })
 
         return toUserResponse(userDelete)

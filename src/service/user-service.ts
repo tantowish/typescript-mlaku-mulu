@@ -118,6 +118,7 @@ export class UserService {
                 email: user.email,
                 username: user.username,
                 password: user.password,
+                updated_at: new Date()
             }
         })
         

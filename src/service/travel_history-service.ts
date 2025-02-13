@@ -82,7 +82,10 @@ export class TravelHistoryService {
 
         const updatedHistory = await prismaClient.travelHistory.update({
             where: { id: history_id },
-            data: historyRequest,
+            data: {
+                ...historyRequest,
+                updated_at: new Date()
+            },
             include: {
                 user: true,
                 travel: {
@@ -110,6 +113,7 @@ export class TravelHistoryService {
                 }
             },
             data: {
+                updated_at: new Date(),
                 deleted_at: new Date()
             }
         })
